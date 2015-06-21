@@ -19,7 +19,7 @@ RUN echo "deb http://ppa.launchpad.net/ondrej/php5-5.6/ubuntu trusty main" \
         > /etc/apt/sources.list.d/php5-5.6.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key E5267A6C
 
-# Install php5 + nginx + DB clients
+# Install php5 + nginx + DB clients + Phalcon
 RUN apt-get update \
   && apt-get install -y -qq \
       nginx \
@@ -27,6 +27,9 @@ RUN apt-get update \
       subversion \
       libxml2 \
       libcurl4-openssl-dev \
+      libpcre3-dev \ 
+      gcc \
+      make \
       php5-dev \
       php5-cli \
       php5-sqlite \
@@ -41,12 +44,16 @@ RUN apt-get update \
       php-apc \
       sqlite3 libsqlite3-dev \
   && pecl install mongo \
+  && git clone --depth=1 git://github.com/phalcon/cphalcon.git \
+  && cd cphalcon/build \
+  && ./install \
   && apt-get clean -qq \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Enable php modules
 RUN echo "extension=mongo.so" > /etc/php5/mods-available/mongo.ini
-RUN php5enmod mcrypt mongo
+RUN echo "extension=phalcon.so" > /etc/php5/mods-available/phalcon.ini
+RUN php5enmod mcrypt mongo phalcon
 
 # nginx config
 ADD nginx-default.conf /etc/nginx/sites-available/default

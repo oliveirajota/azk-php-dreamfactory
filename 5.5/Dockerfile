@@ -22,6 +22,9 @@ RUN apt-get update \
       subversion \
       libxml2 \
       libcurl4-openssl-dev \
+      libpcre3-dev \ 
+      gcc \
+      make \
       php5-dev \
       php5-cli \
       php5-sqlite \
@@ -39,9 +42,16 @@ RUN apt-get update \
   && apt-get clean -qq \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Compile Phalcon PHP
+RUN git clone --depth=1 git://github.com/phalcon/cphalcon.git
+RUN cd cphalcon/build
+RUN ./install
+
 # Enable php modules
 RUN echo "extension=mongo.so" > /etc/php5/mods-available/mongo.ini
-RUN php5enmod mcrypt mongo
+RUN echo "extension=phalcon.so" > /etc/php5/mods-available/phalcon.ini
+RUN php5enmod mcrypt mongo phalcon
+
 
 # nginx config
 ADD nginx-default.conf /etc/nginx/sites-available/default
