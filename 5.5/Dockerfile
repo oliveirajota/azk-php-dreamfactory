@@ -39,13 +39,11 @@ RUN apt-get update \
       php-apc \
       sqlite3 libsqlite3-dev \
   && pecl install mongo \
+  && git clone -b 1.3.5 --depth=1 git://github.com/phalcon/cphalcon.git \
+  && cd cphalcon/build \
+  && ./install \
   && apt-get clean -qq \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Compile Phalcon PHP
-RUN git clone --depth=1 git://github.com/phalcon/cphalcon.git
-RUN cd cphalcon/build
-RUN ./install
 
 # Enable php modules
 RUN echo "extension=mongo.so" > /etc/php5/mods-available/mongo.ini

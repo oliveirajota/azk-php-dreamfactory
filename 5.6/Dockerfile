@@ -44,7 +44,7 @@ RUN apt-get update \
       php-apc \
       sqlite3 libsqlite3-dev \
   && pecl install mongo \
-  && git clone --depth=1 git://github.com/phalcon/cphalcon.git \
+  && git clone -b 1.3.5 --depth=1 git://github.com/phalcon/cphalcon.git \
   && cd cphalcon/build \
   && ./install \
   && apt-get clean -qq \
