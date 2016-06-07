@@ -43,7 +43,7 @@ RUN apt-get update \
       php-pear \
       php-apc \
       sqlite3 libsqlite3-dev \
-  && pecl install mongo \
+  && pecl install mongodb \
   && git clone -b 1.3.5 --depth=1 git://github.com/phalcon/cphalcon.git \
   && cd cphalcon/build \
   && ./install \
@@ -51,9 +51,9 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Enable php modules
-RUN echo "extension=mongo.so" > /etc/php5/mods-available/mongo.ini
+RUN echo "extension=mongodb.so" > /etc/php5/mods-available/mongodb.ini
 RUN echo "extension=phalcon.so" > /etc/php5/mods-available/phalcon.ini
-RUN php5enmod mcrypt mongo phalcon
+RUN php5enmod mcrypt mongodb phalcon
 
 # nginx config
 ADD nginx-default.conf /etc/nginx/sites-available/default
